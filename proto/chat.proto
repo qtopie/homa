@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package main;
+
+// Define the first streaming service
+service StreamingServiceOne {
+  rpc StreamDataOne(StreamRequest) returns (stream StreamResponse);
+}
+
+message StreamRequest {
+  string message = 1;
+}
+
+message StreamResponse {
+  string data = 1;
+}
