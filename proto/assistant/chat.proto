@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package main;
+option go_package = "github.com/qtopie/homa/gen/assistant";
+
+// Define the first streaming service
+service ChatService {
+  rpc Chat(UserRequest) returns (stream StreamResponse);
+}
+
+message UserRequest {
+  string message = 1;
+}
+
+message StreamResponse {
+  string content = 1;
+}
