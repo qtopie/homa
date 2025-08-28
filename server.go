@@ -7,13 +7,13 @@ import (
 	"github.com/qtopie/homa/gen/assistant" // Import the generated code
 )
 
-// ChatServiceServerImpl is the implementation of the ChatService
-type ChatServiceServerImpl struct {
-    assistant.UnimplementedChatServiceServer
+// CopilotServiceServerImpl is the implementation of the ChatService
+type CopilotServiceServerImpl struct {
+    assistant.UnimplementedCopilotServiceServer
 }
 
 // Chat implements the server streaming method for ChatService
-func (s *ChatServiceServerImpl) Chat(req *assistant.UserRequest, stream assistant.ChatService_ChatServer) error {
+func (s *CopilotServiceServerImpl) Chat(req *assistant.UserRequest, stream assistant.CopilotService_ChatServer) error {
     log.Printf("Received Chat request: %s", req.Message)
 
     // Simulate streaming responses

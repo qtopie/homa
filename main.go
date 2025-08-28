@@ -26,8 +26,8 @@ func main() {
 	grpcServer := grpc.NewServer()
 
 	// Register the ChatService implementation
-	chatService := &ChatServiceServerImpl{}
-	assistant.RegisterChatServiceServer(grpcServer, chatService)
+	chatService := &CopilotServiceServerImpl{}
+	assistant.RegisterCopilotServiceServer(grpcServer, chatService)
 
 	// Enable reflection for debugging
 	reflection.Register(grpcServer)

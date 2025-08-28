@@ -4,7 +4,7 @@ package main;
 option go_package = "github.com/qtopie/homa/gen/assistant";
 
 // Define the first streaming service
-service ChatService {
+service CopilotService {
   rpc Chat(UserRequest) returns (stream StreamResponse);
 }
 

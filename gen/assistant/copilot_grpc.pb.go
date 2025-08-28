@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             (unknown)
-// source: assistant/chat.proto
+// source: assistant/copilot.proto
 
 package assistant
 
@@ -19,29 +19,29 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ChatService_Chat_FullMethodName = "/main.ChatService/Chat"
+	CopilotService_Chat_FullMethodName = "/main.CopilotService/Chat"
 )
 
-// ChatServiceClient is the client API for ChatService service.
+// CopilotServiceClient is the client API for CopilotService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
 // Define the first streaming service
-type ChatServiceClient interface {
+type CopilotServiceClient interface {
 	Chat(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[StreamResponse], error)
 }
 
-type chatServiceClient struct {
+type copilotServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewChatServiceClient(cc grpc.ClientConnInterface) ChatServiceClient {
-	return &chatServiceClient{cc}
+func NewCopilotServiceClient(cc grpc.ClientConnInterface) CopilotServiceClient {
+	return &copilotServiceClient{cc}
 }
 
-func (c *chatServiceClient) Chat(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[StreamResponse], error) {
+func (c *copilotServiceClient) Chat(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[StreamResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &ChatService_ServiceDesc.Streams[0], ChatService_Chat_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &CopilotService_ServiceDesc.Streams[0], CopilotService_Chat_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,73 +56,73 @@ func (c *chatServiceClient) Chat(ctx context.Context, in *UserRequest, opts ...g
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type ChatService_ChatClient = grpc.ServerStreamingClient[StreamResponse]
+type CopilotService_ChatClient = grpc.ServerStreamingClient[StreamResponse]
 
-// ChatServiceServer is the server API for ChatService service.
-// All implementations must embed UnimplementedChatServiceServer
+// CopilotServiceServer is the server API for CopilotService service.
+// All implementations must embed UnimplementedCopilotServiceServer
 // for forward compatibility.
 //
 // Define the first streaming service
-type ChatServiceServer interface {
+type CopilotServiceServer interface {
 	Chat(*UserRequest, grpc.ServerStreamingServer[StreamResponse]) error
-	mustEmbedUnimplementedChatServiceServer()
+	mustEmbedUnimplementedCopilotServiceServer()
 }
 
-// UnimplementedChatServiceServer must be embedded to have
+// UnimplementedCopilotServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedChatServiceServer struct{}
+type UnimplementedCopilotServiceServer struct{}
 
-func (UnimplementedChatServiceServer) Chat(*UserRequest, grpc.ServerStreamingServer[StreamResponse]) error {
+func (UnimplementedCopilotServiceServer) Chat(*UserRequest, grpc.ServerStreamingServer[StreamResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method Chat not implemented")
 }
-func (UnimplementedChatServiceServer) mustEmbedUnimplementedChatServiceServer() {}
-func (UnimplementedChatServiceServer) testEmbeddedByValue()                     {}
+func (UnimplementedCopilotServiceServer) mustEmbedUnimplementedCopilotServiceServer() {}
+func (UnimplementedCopilotServiceServer) testEmbeddedByValue()                        {}
 
-// UnsafeChatServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ChatServiceServer will
+// UnsafeCopilotServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CopilotServiceServer will
 // result in compilation errors.
-type UnsafeChatServiceServer interface {
-	mustEmbedUnimplementedChatServiceServer()
+type UnsafeCopilotServiceServer interface {
+	mustEmbedUnimplementedCopilotServiceServer()
 }
 
-func RegisterChatServiceServer(s grpc.ServiceRegistrar, srv ChatServiceServer) {
-	// If the following call pancis, it indicates UnimplementedChatServiceServer was
+func RegisterCopilotServiceServer(s grpc.ServiceRegistrar, srv CopilotServiceServer) {
+	// If the following call pancis, it indicates UnimplementedCopilotServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&ChatService_ServiceDesc, srv)
+	s.RegisterService(&CopilotService_ServiceDesc, srv)
 }
 
-func _ChatService_Chat_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _CopilotService_Chat_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(UserRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(ChatServiceServer).Chat(m, &grpc.GenericServerStream[UserRequest, StreamResponse]{ServerStream: stream})
+	return srv.(CopilotServiceServer).Chat(m, &grpc.GenericServerStream[UserRequest, StreamResponse]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type ChatService_ChatServer = grpc.ServerStreamingServer[StreamResponse]
+type CopilotService_ChatServer = grpc.ServerStreamingServer[StreamResponse]
 
-// ChatService_ServiceDesc is the grpc.ServiceDesc for ChatService service.
+// CopilotService_ServiceDesc is the grpc.ServiceDesc for CopilotService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var ChatService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "main.ChatService",
-	HandlerType: (*ChatServiceServer)(nil),
+var CopilotService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "main.CopilotService",
+	HandlerType: (*CopilotServiceServer)(nil),
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "Chat",
-			Handler:       _ChatService_Chat_Handler,
+			Handler:       _CopilotService_Chat_Handler,
 			ServerStreams: true,
 		},
 	},
-	Metadata: "assistant/chat.proto",
+	Metadata: "assistant/copilot.proto",
 }
