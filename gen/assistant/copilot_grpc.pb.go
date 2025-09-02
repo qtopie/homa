@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CopilotService_Chat_FullMethodName = "/main.CopilotService/Chat"
+	CopilotService_Chat_FullMethodName         = "/main.CopilotService/Chat"
+	CopilotService_AutoComplete_FullMethodName = "/main.CopilotService/AutoComplete"
 )
 
 // CopilotServiceClient is the client API for CopilotService service.
@@ -29,6 +30,7 @@ const (
 // Define the first streaming service
 type CopilotServiceClient interface {
 	Chat(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[StreamResponse], error)
+	AutoComplete(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*AgentResponse, error)
 }
 
 type copilotServiceClient struct {
@@ -58,6 +60,16 @@ func (c *copilotServiceClient) Chat(ctx context.Context, in *UserRequest, opts .
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CopilotService_ChatClient = grpc.ServerStreamingClient[StreamResponse]
 
+func (c *copilotServiceClient) AutoComplete(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*AgentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AgentResponse)
+	err := c.cc.Invoke(ctx, CopilotService_AutoComplete_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CopilotServiceServer is the server API for CopilotService service.
 // All implementations must embed UnimplementedCopilotServiceServer
 // for forward compatibility.
@@ -65,6 +77,7 @@ type CopilotService_ChatClient = grpc.ServerStreamingClient[StreamResponse]
 // Define the first streaming service
 type CopilotServiceServer interface {
 	Chat(*UserRequest, grpc.ServerStreamingServer[StreamResponse]) error
+	AutoComplete(context.Context, *UserRequest) (*AgentResponse, error)
 	mustEmbedUnimplementedCopilotServiceServer()
 }
 
@@ -77,6 +90,9 @@ type UnimplementedCopilotServiceServer struct{}
 
 func (UnimplementedCopilotServiceServer) Chat(*UserRequest, grpc.ServerStreamingServer[StreamResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method Chat not implemented")
+}
+func (UnimplementedCopilotServiceServer) AutoComplete(context.Context, *UserRequest) (*AgentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AutoComplete not implemented")
 }
 func (UnimplementedCopilotServiceServer) mustEmbedUnimplementedCopilotServiceServer() {}
 func (UnimplementedCopilotServiceServer) testEmbeddedByValue()                        {}
@@ -110,13 +126,36 @@ func _CopilotService_Chat_Handler(srv interface{}, stream grpc.ServerStream) err
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type CopilotService_ChatServer = grpc.ServerStreamingServer[StreamResponse]
 
+func _CopilotService_AutoComplete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CopilotServiceServer).AutoComplete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CopilotService_AutoComplete_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CopilotServiceServer).AutoComplete(ctx, req.(*UserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CopilotService_ServiceDesc is the grpc.ServiceDesc for CopilotService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var CopilotService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "main.CopilotService",
 	HandlerType: (*CopilotServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "AutoComplete",
+			Handler:    _CopilotService_AutoComplete_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "Chat",

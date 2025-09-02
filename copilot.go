@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"time"
 
@@ -28,4 +29,16 @@ func (s *CopilotServiceServerImpl) Chat(req *assistant.UserRequest, stream assis
     }
 
     return nil
+}
+
+// AutoComplete implements the unary method for AutoComplete
+func (s *CopilotServiceServerImpl) AutoComplete(ctx context.Context, req *assistant.UserRequest) (*assistant.AgentResponse, error) {
+    log.Printf("Received AutoComplete request: %s", req.Message)
+
+    // Simulate generating a response
+    resp := &assistant.AgentResponse{
+        Content: "AutoComplete response for: " + req.Message,
+    }
+
+    return resp, nil
 }

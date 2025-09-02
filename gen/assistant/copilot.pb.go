@@ -65,6 +65,50 @@ func (x *UserRequest) GetMessage() string {
 	return ""
 }
 
+type AgentResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Content       string                 `protobuf:"bytes,1,opt,name=content,proto3" json:"content,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AgentResponse) Reset() {
+	*x = AgentResponse{}
+	mi := &file_assistant_copilot_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AgentResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AgentResponse) ProtoMessage() {}
+
+func (x *AgentResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_assistant_copilot_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AgentResponse.ProtoReflect.Descriptor instead.
+func (*AgentResponse) Descriptor() ([]byte, []int) {
+	return file_assistant_copilot_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *AgentResponse) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
 type StreamResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Content       string                 `protobuf:"bytes,1,opt,name=content,proto3" json:"content,omitempty"`
@@ -74,7 +118,7 @@ type StreamResponse struct {
 
 func (x *StreamResponse) Reset() {
 	*x = StreamResponse{}
-	mi := &file_assistant_copilot_proto_msgTypes[1]
+	mi := &file_assistant_copilot_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -86,7 +130,7 @@ func (x *StreamResponse) String() string {
 func (*StreamResponse) ProtoMessage() {}
 
 func (x *StreamResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_assistant_copilot_proto_msgTypes[1]
+	mi := &file_assistant_copilot_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -99,7 +143,7 @@ func (x *StreamResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreamResponse.ProtoReflect.Descriptor instead.
 func (*StreamResponse) Descriptor() ([]byte, []int) {
-	return file_assistant_copilot_proto_rawDescGZIP(), []int{1}
+	return file_assistant_copilot_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *StreamResponse) GetContent() string {
@@ -115,11 +159,14 @@ const file_assistant_copilot_proto_rawDesc = "" +
 	"\n" +
 	"\x17assistant/copilot.proto\x12\x04main\"'\n" +
 	"\vUserRequest\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage\"*\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\")\n" +
+	"\rAgentResponse\x12\x18\n" +
+	"\acontent\x18\x01 \x01(\tR\acontent\"*\n" +
 	"\x0eStreamResponse\x12\x18\n" +
-	"\acontent\x18\x01 \x01(\tR\acontent2C\n" +
+	"\acontent\x18\x01 \x01(\tR\acontent2{\n" +
 	"\x0eCopilotService\x121\n" +
-	"\x04Chat\x12\x11.main.UserRequest\x1a\x14.main.StreamResponse0\x01B&Z$github.com/qtopie/homa/gen/assistantb\x06proto3"
+	"\x04Chat\x12\x11.main.UserRequest\x1a\x14.main.StreamResponse0\x01\x126\n" +
+	"\fAutoComplete\x12\x11.main.UserRequest\x1a\x13.main.AgentResponseB&Z$github.com/qtopie/homa/gen/assistantb\x06proto3"
 
 var (
 	file_assistant_copilot_proto_rawDescOnce sync.Once
@@ -133,16 +180,19 @@ func file_assistant_copilot_proto_rawDescGZIP() []byte {
 	return file_assistant_copilot_proto_rawDescData
 }
 
-var file_assistant_copilot_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_assistant_copilot_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_assistant_copilot_proto_goTypes = []any{
 	(*UserRequest)(nil),    // 0: main.UserRequest
-	(*StreamResponse)(nil), // 1: main.StreamResponse
+	(*AgentResponse)(nil),  // 1: main.AgentResponse
+	(*StreamResponse)(nil), // 2: main.StreamResponse
 }
 var file_assistant_copilot_proto_depIdxs = []int32{
 	0, // 0: main.CopilotService.Chat:input_type -> main.UserRequest
-	1, // 1: main.CopilotService.Chat:output_type -> main.StreamResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	0, // 1: main.CopilotService.AutoComplete:input_type -> main.UserRequest
+	2, // 2: main.CopilotService.Chat:output_type -> main.StreamResponse
+	1, // 3: main.CopilotService.AutoComplete:output_type -> main.AgentResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -159,7 +209,7 @@ func file_assistant_copilot_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_assistant_copilot_proto_rawDesc), len(file_assistant_copilot_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -6,10 +6,16 @@ option go_package = "github.com/qtopie/homa/gen/assistant";
 // Define the first streaming service
 service CopilotService {
   rpc Chat(UserRequest) returns (stream StreamResponse);
+
+  rpc AutoComplete(UserRequest) returns (AgentResponse);
 }
 
 message UserRequest {
   string message = 1;
+}
+
+message AgentResponse {
+  string content = 1;
 }
 
 message StreamResponse {
