@@ -157,16 +157,16 @@ var File_assistant_copilot_proto protoreflect.FileDescriptor
 
 const file_assistant_copilot_proto_rawDesc = "" +
 	"\n" +
-	"\x17assistant/copilot.proto\x12\x04main\"'\n" +
+	"\x17assistant/copilot.proto\x12\tassistant\"'\n" +
 	"\vUserRequest\x12\x18\n" +
 	"\amessage\x18\x01 \x01(\tR\amessage\")\n" +
 	"\rAgentResponse\x12\x18\n" +
 	"\acontent\x18\x01 \x01(\tR\acontent\"*\n" +
 	"\x0eStreamResponse\x12\x18\n" +
-	"\acontent\x18\x01 \x01(\tR\acontent2{\n" +
-	"\x0eCopilotService\x121\n" +
-	"\x04Chat\x12\x11.main.UserRequest\x1a\x14.main.StreamResponse0\x01\x126\n" +
-	"\fAutoComplete\x12\x11.main.UserRequest\x1a\x13.main.AgentResponseB&Z$github.com/qtopie/homa/gen/assistantb\x06proto3"
+	"\acontent\x18\x01 \x01(\tR\acontent2\x8f\x01\n" +
+	"\x0eCopilotService\x12;\n" +
+	"\x04Chat\x12\x16.assistant.UserRequest\x1a\x19.assistant.StreamResponse0\x01\x12@\n" +
+	"\fAutoComplete\x12\x16.assistant.UserRequest\x1a\x18.assistant.AgentResponseB&Z$github.com/qtopie/homa/gen/assistantb\x06proto3"
 
 var (
 	file_assistant_copilot_proto_rawDescOnce sync.Once
@@ -182,15 +182,15 @@ func file_assistant_copilot_proto_rawDescGZIP() []byte {
 
 var file_assistant_copilot_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_assistant_copilot_proto_goTypes = []any{
-	(*UserRequest)(nil),    // 0: main.UserRequest
-	(*AgentResponse)(nil),  // 1: main.AgentResponse
-	(*StreamResponse)(nil), // 2: main.StreamResponse
+	(*UserRequest)(nil),    // 0: assistant.UserRequest
+	(*AgentResponse)(nil),  // 1: assistant.AgentResponse
+	(*StreamResponse)(nil), // 2: assistant.StreamResponse
 }
 var file_assistant_copilot_proto_depIdxs = []int32{
-	0, // 0: main.CopilotService.Chat:input_type -> main.UserRequest
-	0, // 1: main.CopilotService.AutoComplete:input_type -> main.UserRequest
-	2, // 2: main.CopilotService.Chat:output_type -> main.StreamResponse
-	1, // 3: main.CopilotService.AutoComplete:output_type -> main.AgentResponse
+	0, // 0: assistant.CopilotService.Chat:input_type -> assistant.UserRequest
+	0, // 1: assistant.CopilotService.AutoComplete:input_type -> assistant.UserRequest
+	2, // 2: assistant.CopilotService.Chat:output_type -> assistant.StreamResponse
+	1, // 3: assistant.CopilotService.AutoComplete:output_type -> assistant.AgentResponse
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

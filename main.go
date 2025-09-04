@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/go-viper/encoding/ini"
 	"github.com/qtopie/homa/gen/assistant"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
@@ -13,11 +14,18 @@ import (
 
 func main() {
 	// Configure Viper to read the config file
-	viper.SetConfigName("config")
-	viper.SetConfigType("ini")
-	viper.AddConfigPath("$HOME/.homa")
-	viper.AddConfigPath(".")
-	if err := viper.ReadInConfig(); err != nil {
+	codecRegistry := viper.NewCodecRegistry()
+	codecRegistry.RegisterCodec("ini", ini.Codec{})
+
+	v := viper.NewWithOptions(
+		viper.WithCodecRegistry(codecRegistry),
+	)
+
+	v.SetConfigName("config")
+	v.SetConfigType("ini")
+	v.AddConfigPath(".")
+	v.AddConfigPath("$HOME/.homa")
+	if err := v.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config file: %v", err)
 	}
 
@@ -28,7 +36,7 @@ func main() {
 	copilotService := NewCopilotServiceServerImpl(pluginManager)
 
 	// Start the gRPC server
-	address := viper.GetString("app.system.address")
+	address := v.GetString("app.address")
 	lis, err := net.Listen("tcp", address)
 	if err != nil {
 		log.Fatalf("Failed to listen on %s: %v", address, err)

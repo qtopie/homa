@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CopilotService_Chat_FullMethodName         = "/main.CopilotService/Chat"
-	CopilotService_AutoComplete_FullMethodName = "/main.CopilotService/AutoComplete"
+	CopilotService_Chat_FullMethodName         = "/assistant.CopilotService/Chat"
+	CopilotService_AutoComplete_FullMethodName = "/assistant.CopilotService/AutoComplete"
 )
 
 // CopilotServiceClient is the client API for CopilotService service.
@@ -148,7 +148,7 @@ func _CopilotService_AutoComplete_Handler(srv interface{}, ctx context.Context, 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var CopilotService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "main.CopilotService",
+	ServiceName: "assistant.CopilotService",
 	HandlerType: (*CopilotServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

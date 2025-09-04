@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package main;
+package assistant;
 option go_package = "github.com/qtopie/homa/gen/assistant";
 
 // Define the first streaming service
