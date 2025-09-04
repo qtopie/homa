@@ -1,5 +1,11 @@
 # homa
 
+build plugins 
+
+```
+go build -buildmode=plugin -o mock.so
+```
+
 test
 
 ```

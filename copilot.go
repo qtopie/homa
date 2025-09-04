@@ -29,7 +29,7 @@ func NewCopilotServiceServerImpl(pluginManager *PluginManager) *CopilotServiceSe
 // Chat implements the server streaming method for ChatService
 func (s *CopilotServiceServerImpl) Chat(req *assistant.UserRequest, stream assistant.CopilotService_ChatServer) error {
 	// Get the plugin name from the configuration
-	copilotPluginName := viper.GetString("app.copilot.plugin")
+	copilotPluginName := viper.GetString("plugins.copilot")
 	if copilotPluginName == "" {
 		return fmt.Errorf("no copilot plugin specified in configuration")
 	}
