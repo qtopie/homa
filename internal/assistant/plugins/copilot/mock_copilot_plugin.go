@@ -3,21 +3,23 @@ package main
 import (
 	"fmt"
 	"time"
+
+	"github.com/qtopie/homa/internal/assistant/plugins/copilot/shared"
 )
 
 // MockCopilotPlugin is a mock implementation of the CopilotPlugin interface
 type MockCopilotPlugin struct{}
 
 // Chat simulates streaming data chunks to the client
-func (p *MockCopilotPlugin) Chat(req UserRequest) (<-chan ChunkData, error) {
-	ch := make(chan ChunkData)
+func (p MockCopilotPlugin) Chat(req shared.UserRequest) (<-chan shared.ChunkData, error) {
+	ch := make(chan shared.ChunkData)
 
 	go func() {
 		defer close(ch) // Ensure the channel is closed when done
 
 		// Simulate sending 5 chunks of data
 		for i := 1; i <= 5; i++ {
-			ch <- ChunkData{
+			ch <- shared.ChunkData{
 				ID:      fmt.Sprintf("%d", i),
 				Content: fmt.Sprintf("Chunk %d: %s", i, req.Message),
 				IsLast:  i == 5, // Mark the last chunk
@@ -30,7 +32,7 @@ func (p *MockCopilotPlugin) Chat(req UserRequest) (<-chan ChunkData, error) {
 }
 
 // AutoComplete simulates generating a single response
-func (p *MockCopilotPlugin) AutoComplete(req UserRequest) (string, error) {
+func (p MockCopilotPlugin) AutoComplete(req shared.UserRequest) (string, error) {
 	return fmt.Sprintf("AutoComplete response for: %s", req.Message), nil
 }
 

@@ -3,13 +3,15 @@
 build plugins 
 
 ```
-go build -buildmode=plugin -o mock.so
+go build -buildmode=plugin -o mock.so mock_copilot_plugin.go
 ```
 
 test
 
 ```
-calvin.y@Mac go-futu-api % grpcurl -plaintext -d '{"message": "Hello, Service Two!"}' localhost:1234 main.ChatService.Chat
+grpcurl -plaintext -d '{"message": "Hello, Service Two!"}' localhost:1234 assistant.CopilotService.Chat
+
+
 {
   "content": "Hello, Service Two! - Response 2025-08-28T22:14:08+08:00"
 }

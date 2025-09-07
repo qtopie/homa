@@ -1,17 +1,9 @@
 package main
 
-type UserRequest struct {
-	Message string
-}
-
-type ChunkData struct {
-	ID string
-	Content string
-	IsLast bool
-}
+import "github.com/qtopie/homa/internal/assistant/plugins/copilot/shared"
 
 type CopilotPlugin interface {
-	Chat(UserRequest) (<-chan ChunkData, error)
+	Chat(shared.UserRequest) (<-chan shared.ChunkData, error)
 
-	AutoComplete(UserRequest) (string, error)
+	AutoComplete(shared.UserRequest) (string, error)
 }

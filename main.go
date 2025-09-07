@@ -12,23 +12,29 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-func main() {
+var (
+	viperCfg *viper.Viper
+)
+
+func init() {
 	// Configure Viper to read the config file
 	codecRegistry := viper.NewCodecRegistry()
 	codecRegistry.RegisterCodec("ini", ini.Codec{})
 
-	v := viper.NewWithOptions(
+	viperCfg = viper.NewWithOptions(
 		viper.WithCodecRegistry(codecRegistry),
 	)
 
-	v.SetConfigName("config")
-	v.SetConfigType("ini")
-	v.AddConfigPath(".")
-	v.AddConfigPath("$HOME/.homa")
-	if err := v.ReadInConfig(); err != nil {
+	viperCfg.SetConfigName("config")
+	viperCfg.SetConfigType("ini")
+	viperCfg.AddConfigPath(".")
+	viperCfg.AddConfigPath("$HOME/.homa")
+	if err := viperCfg.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config file: %v", err)
 	}
+}
 
+func main() {
 	// Initialize the PluginManager
 	pluginManager := NewPluginManager("/opt/homa/plugins")
 
@@ -36,7 +42,7 @@ func main() {
 	copilotService := NewCopilotServiceServerImpl(pluginManager)
 
 	// Start the gRPC server
-	address := v.GetString("app.address")
+	address := viperCfg.GetString("app.address")
 	lis, err := net.Listen("tcp", address)
 	if err != nil {
 		log.Fatalf("Failed to listen on %s: %v", address, err)
