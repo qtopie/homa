@@ -11,13 +11,21 @@ service CopilotService {
 }
 
 message UserRequest {
-  string message = 1;
+  string sessionId = 1;
+  int32 seq = 2;
+  string message = 3;
+  string prefix = 4;
+  string suffix = 5;
 }
 
 message AgentResponse {
-  string content = 1;
+  string sessionId = 1;
+  int32 seq = 2;
+  string content = 3;
 }
 
 message StreamResponse {
-  string content = 1;
+  string sessionId = 1;
+  int32 seq = 2;
+  string content = 3;
 }
