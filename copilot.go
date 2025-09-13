@@ -29,6 +29,80 @@ func NewCopilotServiceServerImpl(pluginManager *PluginManager) *CopilotServiceSe
 
 // Chat implements the server streaming method for ChatService
 func (s *CopilotServiceServerImpl) Chat(req *assistant.UserRequest, stream assistant.CopilotService_ChatServer) error {
+	err := s.loadAndRefreshPlugin()
+	if err != nil {
+		log.Println("failed to load plugin", err)
+		return err
+	}
+
+	// Forward the request to the plugin's Chat method
+	pluginStream, err := s.currentPlugin.Chat(shared.UserRequest{
+		SessionId: req.SessionId,
+		Seq:       req.Seq,
+		Message:   req.Message,
+		FrontPart: req.FrontPart,
+		BackPart:  req.BackPart,
+		Filename:  req.Filename,
+		Workspace: req.Workspace,
+	})
+	if err != nil {
+		log.Printf("Error calling Chat on plugin %s: %v", s.currentName, err)
+		return err
+	}
+
+	// Consume the plugin's stream and forward to gRPC stream
+	for chunk := range pluginStream {
+		// Send each chunk to the gRPC stream
+		resp := &assistant.StreamResponse{
+			Content: chunk.Content,
+		}
+		if err := stream.Send(resp); err != nil {
+			log.Printf("Error sending response to gRPC stream: %v", err)
+			return err
+		}
+
+		// Check if this is the last chunk
+		if chunk.IsLast {
+			log.Printf("Received end signal from plugin %s", s.currentName)
+			break
+		}
+	}
+
+	log.Printf("Chat request completed for message: %s", req.Message)
+	return nil
+}
+
+// AutoComplete implements the unary method for AutoComplete
+func (s *CopilotServiceServerImpl) AutoComplete(ctx context.Context, req *assistant.UserRequest) (*assistant.AgentResponse, error) {
+	err := s.loadAndRefreshPlugin()
+	if err != nil {
+		log.Println("failed to load plugin", err)
+		return nil, err
+	}
+
+	// Forward the request to the plugin's Chat method
+	reply, err := s.currentPlugin.AutoComplete(shared.UserRequest{
+		SessionId: req.SessionId,
+		Seq:       req.Seq,
+		Message:   req.Message,
+		FrontPart: req.FrontPart,
+		BackPart:  req.BackPart,
+		Filename:  req.Filename,
+		Workspace: req.Workspace,
+	})
+	if err != nil {
+		log.Printf("Error calling Chat on plugin %s: %v", s.currentName, err)
+		return nil, err
+	}
+	log.Println("autocomplete", req.Message, "response", reply)
+
+	resp := &assistant.AgentResponse{
+		Content: reply,
+	}
+	return resp, nil
+}
+
+func (s *CopilotServiceServerImpl) loadAndRefreshPlugin() error {
 	// Get the plugin name from the configuration
 	copilotPluginName := cfg.GetAppConfig().GetString("plugins.copilot")
 	if copilotPluginName == "" {
@@ -67,44 +141,5 @@ func (s *CopilotServiceServerImpl) Chat(req *assistant.UserRequest, stream assis
 		s.currentName = copilotPluginName
 	}
 	s.mu.Unlock()
-
-	// Forward the request to the plugin's Chat method
-	pluginStream, err := s.currentPlugin.Chat(shared.UserRequest{Message: req.Message})
-	if err != nil {
-		log.Printf("Error calling Chat on plugin %s: %v", s.currentName, err)
-		return err
-	}
-
-	// Consume the plugin's stream and forward to gRPC stream
-	for chunk := range pluginStream {
-		// Send each chunk to the gRPC stream
-		resp := &assistant.StreamResponse{
-			Content: chunk.Content,
-		}
-		if err := stream.Send(resp); err != nil {
-			log.Printf("Error sending response to gRPC stream: %v", err)
-			return err
-		}
-
-		// Check if this is the last chunk
-		if chunk.IsLast {
-			log.Printf("Received end signal from plugin %s", s.currentName)
-			break
-		}
-	}
-
-	log.Printf("Chat request completed for message: %s", req.Message)
 	return nil
-}
-
-// AutoComplete implements the unary method for AutoComplete
-func (s *CopilotServiceServerImpl) AutoComplete(ctx context.Context, req *assistant.UserRequest) (*assistant.AgentResponse, error) {
-	log.Printf("Received AutoComplete request: %s", req.Message)
-
-	// Simulate generating a response
-	resp := &assistant.AgentResponse{
-		Content: "AutoComplete response for: " + req.Message,
-	}
-
-	return resp, nil
 }

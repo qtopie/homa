@@ -1,11 +1,17 @@
 package shared
 
 type UserRequest struct {
-	Message string
+	SessionId string
+	Seq       int32
+	Message   string
+	FrontPart string
+	BackPart string
+	Filename  string
+	Workspace string
 }
 
 type ChunkData struct {
-	ID string
+	ID      string
 	Content string
-	IsLast bool
+	IsLast  bool
 }
