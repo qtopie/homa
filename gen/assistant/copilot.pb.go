@@ -26,8 +26,10 @@ type UserRequest struct {
 	SessionId     string                 `protobuf:"bytes,1,opt,name=sessionId,proto3" json:"sessionId,omitempty"`
 	Seq           int32                  `protobuf:"varint,2,opt,name=seq,proto3" json:"seq,omitempty"`
 	Message       string                 `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
-	Prefix        string                 `protobuf:"bytes,4,opt,name=prefix,proto3" json:"prefix,omitempty"`
-	Suffix        string                 `protobuf:"bytes,5,opt,name=suffix,proto3" json:"suffix,omitempty"`
+	FrontPart     string                 `protobuf:"bytes,4,opt,name=frontPart,proto3" json:"frontPart,omitempty"`
+	BackPart      string                 `protobuf:"bytes,5,opt,name=backPart,proto3" json:"backPart,omitempty"`
+	Filename      string                 `protobuf:"bytes,6,opt,name=filename,proto3" json:"filename,omitempty"`
+	Workspace     string                 `protobuf:"bytes,7,opt,name=workspace,proto3" json:"workspace,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -83,16 +85,30 @@ func (x *UserRequest) GetMessage() string {
 	return ""
 }
 
-func (x *UserRequest) GetPrefix() string {
+func (x *UserRequest) GetFrontPart() string {
 	if x != nil {
-		return x.Prefix
+		return x.FrontPart
 	}
 	return ""
 }
 
-func (x *UserRequest) GetSuffix() string {
+func (x *UserRequest) GetBackPart() string {
 	if x != nil {
-		return x.Suffix
+		return x.BackPart
+	}
+	return ""
+}
+
+func (x *UserRequest) GetFilename() string {
+	if x != nil {
+		return x.Filename
+	}
+	return ""
+}
+
+func (x *UserRequest) GetWorkspace() string {
+	if x != nil {
+		return x.Workspace
 	}
 	return ""
 }
@@ -221,13 +237,15 @@ var File_assistant_copilot_proto protoreflect.FileDescriptor
 
 const file_assistant_copilot_proto_rawDesc = "" +
 	"\n" +
-	"\x17assistant/copilot.proto\x12\tassistant\"\x87\x01\n" +
+	"\x17assistant/copilot.proto\x12\tassistant\"\xcb\x01\n" +
 	"\vUserRequest\x12\x1c\n" +
 	"\tsessionId\x18\x01 \x01(\tR\tsessionId\x12\x10\n" +
 	"\x03seq\x18\x02 \x01(\x05R\x03seq\x12\x18\n" +
-	"\amessage\x18\x03 \x01(\tR\amessage\x12\x16\n" +
-	"\x06prefix\x18\x04 \x01(\tR\x06prefix\x12\x16\n" +
-	"\x06suffix\x18\x05 \x01(\tR\x06suffix\"Y\n" +
+	"\amessage\x18\x03 \x01(\tR\amessage\x12\x1c\n" +
+	"\tfrontPart\x18\x04 \x01(\tR\tfrontPart\x12\x1a\n" +
+	"\bbackPart\x18\x05 \x01(\tR\bbackPart\x12\x1a\n" +
+	"\bfilename\x18\x06 \x01(\tR\bfilename\x12\x1c\n" +
+	"\tworkspace\x18\a \x01(\tR\tworkspace\"Y\n" +
 	"\rAgentResponse\x12\x1c\n" +
 	"\tsessionId\x18\x01 \x01(\tR\tsessionId\x12\x10\n" +
 	"\x03seq\x18\x02 \x01(\x05R\x03seq\x12\x18\n" +
