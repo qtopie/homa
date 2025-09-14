@@ -1,9 +1,9 @@
 package shared
 
 type UserRequest struct {
-	SessionId string
-	Seq       int32
-	Message   string
+	SessionId string `json:"-"`
+	Seq       int32 `json:"-"`
+	Message   string 
 	FrontPart string
 	BackPart string
 	Filename  string

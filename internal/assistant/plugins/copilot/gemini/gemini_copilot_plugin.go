@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"net/http"
 	"net/url"
@@ -16,6 +17,8 @@ import (
 var (
 	httpClient   *http.Client
 	geminiApiKey string
+
+	codeCompletionPrompt string
 )
 
 func init() {
@@ -52,6 +55,23 @@ func init() {
 		httpClient = &http.Client{}
 	}
 
+	// 1. Define the template string
+	codeCompletionPrompt = `
+	You are a highly skilled and efficient code completion assistant. Your task is to generate the most logical and correct completion for the code snippet provided below.
+
+The user is working in a file named: {{.filename}} in workspace {{.workspace}}
+
+The full code content of the file is:
+---
+{{.code_before_cursor}}
+{{.cursor_here}}{{.code_after_cursor}}
+---
+
+Your response should be a clean, single block of code that logically follows the cursor position. Do not include any extra text, explanations, or conversational filler. Just the code.
+	`
+
+	
+
 }
 
 // GeminiCopilotPlugin is a mock implementation of the CopilotPlugin interface
@@ -81,7 +101,7 @@ func (p GeminiCopilotPlugin) Chat(req shared.UserRequest) (<-chan shared.ChunkDa
 			nil,
 		)
 
-		for chunk, _ := range stream {
+		for chunk := range stream {
 			part := chunk.Candidates[0].Content.Parts[0]
 			ch <- shared.ChunkData{
 				Content: part.Text,
@@ -105,11 +125,21 @@ func (p GeminiCopilotPlugin) AutoComplete(req shared.UserRequest) (string, error
 		log.Fatal(err)
 	}
 
+	data, err := json.Marshal(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	result, err := client.Models.GenerateContent(
 		ctx,
 		"gemini-2.0-flash",
-		genai.Text(req.Message),
-		nil,
+		genai.Text(string(data)),
+		&genai.GenerateContentConfig{
+			SystemInstruction: &genai.Content{
+					Role:  genai.RoleModel,
+					Parts: []*genai.Part{{Text: codeCompletionPrompt}},
+			},
+		},
 	)
 	if err != nil {
 		log.Fatal(err)
