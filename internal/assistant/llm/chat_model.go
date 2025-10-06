@@ -129,7 +129,10 @@ func (m *HomaChatModel) WithTools(tools []*schema.ToolInfo) (model.ToolCallingCh
 
 func (m *HomaChatModel) doGenerate(ctx context.Context, messages []*schema.Message, opts *MyChatModelOptions) (*schema.Message, error) {
 	// 实现生成逻辑
-	return nil, nil
+	return &schema.Message{
+		Role: schema.Assistant,
+		Content: "Hello Wolrd!",
+	}, nil
 }
 
 func (m *HomaChatModel) doStream(ctx context.Context, messages []*schema.Message, opts *MyChatModelOptions, sr *schema.StreamWriter[*model.CallbackOutput]) {
