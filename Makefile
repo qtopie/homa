@@ -5,9 +5,10 @@ GO := go
 PLUGIN_FLAGS := -buildmode=plugin
 
 # Define the plugin output names
-PLUGINS := gemini.so mock.so
+PLUGINS := gemini.so mock.so eino.so
 
 # Define the source paths for each plugin using target-specific variable names
+PLUGIN_SRC_enio.so := internal/assistant/plugins/copilot/eino/eino_copilot_plugin.go
 PLUGIN_SRC_gemini.so := internal/assistant/plugins/copilot/gemini/gemini_copilot_plugin.go
 PLUGIN_SRC_mock.so := internal/assistant/plugins/copilot/mock/mock_copilot_plugin.go
 
