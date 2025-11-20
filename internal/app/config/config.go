@@ -24,7 +24,7 @@ func init() {
 	viperCfg.SetConfigName("config")
 	viperCfg.SetConfigType("ini")
 	viperCfg.AddConfigPath(".")
-	viperCfg.AddConfigPath("$HOME/.homa")
+	viperCfg.AddConfigPath("$HOME/.cosmos")
 	if err := viperCfg.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config file: %v", err)
 	}
