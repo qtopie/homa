@@ -94,10 +94,18 @@ func (p GeminiCopilotPlugin) Chat(req shared.UserRequest) (<-chan shared.ChunkDa
 			log.Fatal(err)
 		}
 
+		// Marshal full request (including History) so model receives session context
+		data, err := json.Marshal(req)
+		if err != nil {
+			log.Printf("failed to marshal request for streaming: %v", err)
+			// fallback to message only
+			data = []byte(req.Message)
+		}
+
 		stream := client.Models.GenerateContentStream(
 			ctx,
 			"gemini-2.5-flash",
-			genai.Text(req.Message),
+			genai.Text(string(data)),
 			nil,
 		)
 
